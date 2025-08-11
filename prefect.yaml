@@ -1,0 +1,31 @@
+name: roast-bot
+prefect-version: 3.4.12
+
+build:
+- prefect_docker.deployments.steps.build_docker_image:
+    id: build_image
+    requires: prefect-docker>=0.3.1
+    image_name: desertaxle/roast-bot
+    tag: 1.0.0
+    dockerfile: Dockerfile
+
+push:
+- prefect_docker.deployments.steps.push_docker_image:
+    requires: prefect-docker>=0.3.1
+    image_name: '{{ build_image.image_name }}'
+    tag: '{{ build_image.tag }}'
+
+pull:
+- prefect.deployments.steps.git_clone:
+    repository: https://github.com/desertaxle/roast-bot.git
+
+deployments:
+- name: desertaxle
+  description: Roast desertaxle's contributions to the PrefectHQ/prefect repo
+  entrypoint: main.py:roast_prefect_developer
+  parameters:
+    handle: desertaxle
+  work_pool:
+    name: above-ground
+    job_variables:
+      image: '{{ build_image.image }}'
