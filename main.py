@@ -14,6 +14,14 @@ DEV_LOG_REPO_URL = "https://github.com/PrefectHQ/dev-log.git"
 _FRONT_MATTER_RE = re.compile(r"^\ufeff?\+\+\+\s*\n(.*?)\n\+\+\+\s*(?:\n|$)", re.DOTALL)
 
 
+@task
+async def set_up_git():
+    # check token works
+    await anyio.run_process(["gh", "auth", "status"], check=True)
+    # set up git credential manager
+    await anyio.run_process(["gh", "auth", "setup-git"], check=True)
+
+
 @task(retries=3, retry_delay_seconds=5)
 async def clone_dev_log(tmp_dir: Path) -> None:
     logger = get_run_logger()
@@ -117,9 +125,11 @@ def parse_frontmatter(content: str) -> dict[str, Any]:
 
 @flow
 async def roast_prefect_developer(handle: str):
-    with tempfile.TemporaryDirectory(delete=False) as temp_dir:
-        logger = get_run_logger()
+    logger = get_run_logger()
 
+    await set_up_git()
+
+    with tempfile.TemporaryDirectory(delete=False) as temp_dir:
         tmp_path = Path(temp_dir)
         await clone_dev_log(tmp_path)
         if not await any_recent_blog_posts(handle, tmp_path):

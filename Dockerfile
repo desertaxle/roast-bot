@@ -1,13 +1,24 @@
 FROM prefecthq/prefect:3-latest
 
-# install uv
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+# install necessary packages
+RUN apt-get update && apt-get install -y \
+curl \
+gpg
 
-# install curl
-RUN apt update && apt install curl -y
+# add gh GPG key
+RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg;
+
+# add gh repository
+RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null;
+
+# install gh
+RUN apt-get update && apt-get install -y gh;
 
 # install claude-code
 RUN curl -fsSL https://claude.ai/install.sh | bash
+
+# install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # install dependencies
 COPY pyproject.toml .
