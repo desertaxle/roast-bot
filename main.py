@@ -24,14 +24,12 @@ async def set_up_git():
     await anyio.run_process(["git", "config", "--global", "user.name", "roast-bot"], check=True)
     await anyio.run_process(["git", "config", "--global", "user.email", "roast-bot@users.noreply.github.com"], check=True)
 
-    # TODO: Remove when you're done testing
-    await anyio.run_process(["git", "checkout", "-b", "roast-bot-test"], check=True)
-
 
 @task(retries=3, retry_delay_seconds=5)
 async def clone_dev_log(tmp_dir: Path) -> None:
     logger = get_run_logger()
     logger.info(f"Cloning dev log to {tmp_dir}")
+
     await anyio.run_process(["git", "clone", DEV_LOG_REPO_URL, tmp_dir], check=True)
     logger.info("Dev log successfully cloned")
 
@@ -105,6 +103,9 @@ async def generate_roast(handle: str, tmp_dir: Path) -> None:
 async def push_to_dev_log(handle: str, tmp_dir: Path) -> None:
     logger = get_run_logger()
     logger.info("Pushing roast to dev log")
+
+    # TODO: Remove when you're done testing
+    await anyio.run_process(["git", "checkout", "-b", "roast-bot-test"], check=True, cwd=tmp_dir)
 
     await anyio.run_process(["git", "add", "."], check=True, cwd=tmp_dir)
     await anyio.run_process(
