@@ -28,13 +28,17 @@ RUN npm -v
 # install claude-code
 RUN npm install -g @anthropic-ai/claude-code
 
+# verify the claude-code version:
+RUN claude --version
+
 # install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+ENV UV_SYSTEM_PYTHON=1
+ENV UV_COMPILE_BYTECODE=1
 
 # install dependencies
 COPY pyproject.toml .
-RUN uv sync --no-dev --compile-bytecode
-ENV PATH="/app/.venv/bin:$PATH"
+RUN uv pip install -r pyproject.toml
 
 # copy code
 COPY main.py .
