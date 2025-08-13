@@ -20,6 +20,12 @@ async def set_up_git():
     await anyio.run_process(["gh", "auth", "status"], check=True)
     # set up git credential manager
     await anyio.run_process(["gh", "auth", "setup-git"], check=True)
+    # add a git config
+    await anyio.run_process(["git", "config", "--global", "user.name", "roast-bot"], check=True)
+    await anyio.run_process(["git", "config", "--global", "user.email", "roast-bot@users.noreply.github.com"], check=True)
+
+    # TODO: Remove when you're done testing
+    await anyio.run_process(["git", "checkout", "-b", "roast-bot-test"], check=True)
 
 
 @task(retries=3, retry_delay_seconds=5)
@@ -127,8 +133,6 @@ def parse_frontmatter(content: str) -> dict[str, Any]:
 async def roast_prefect_developer(handle: str):
     logger = get_run_logger()
 
-    await smoke_test()
-
     await set_up_git()
 
     with tempfile.TemporaryDirectory(delete=False) as temp_dir:
@@ -140,10 +144,3 @@ async def roast_prefect_developer(handle: str):
             await push_to_dev_log(handle, tmp_path)
         else:
             logger.info(f"Recent blog posts found. I'll get you next time, {handle}!")
-
-
-async def smoke_test():
-    await anyio.run_process(["which", "gh"], check=True)
-    await anyio.run_process(["which", "git"], check=True)
-    await anyio.run_process(["which", "node"], check=True)
-    await anyio.run_process(["which", "claude"], check=True)
