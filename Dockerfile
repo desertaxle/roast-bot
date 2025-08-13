@@ -1,6 +1,7 @@
 FROM prefecthq/prefect:3-latest
 
 WORKDIR /app
+SHELL ["/bin/bash", "--login", "-c"]
 
 # install necessary packages
 RUN apt-get update && apt-get install -y curl gpg unzip
@@ -17,11 +18,8 @@ RUN apt-get update && apt-get install -y gh;
 # download and install nvm:
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 
-# in lieu of restarting the shell
-RUN \. "$HOME/.nvm/nvm.sh"
-
 # install node
-RUN nvm install 22
+RUN nvm install 22 && nvm use 22
 
 # verify the node and npm versions:
 RUN node -v
