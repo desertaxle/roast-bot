@@ -16,9 +16,21 @@ RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/g
 # install gh
 RUN apt-get update && apt-get install -y gh;
 
+# download and install fnm:
+curl -o- https://fnm.vercel.app/install | bash
+
+# download and install Node.js:
+fnm install 22
+
+# verify the Node.js version:
+node -v
+
+# verify npm version:
+npm -v
+    
+
 # install claude-code
-RUN curl -fsSL https://claude.ai/install.sh | bash
-ENV PATH="~/.local/bin:$PATH"
+RUN npm install -g @anthropic-ai/claude-code
 
 # install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
