@@ -31,6 +31,10 @@ RUN npm install -g @anthropic-ai/claude-code
 # verify the claude-code version:
 RUN claude --version
 
+# Create symlinks for node and claude
+RUN ln -sf $(which node) /usr/local/bin/node
+RUN ln -sf $(which claude) /usr/local/bin/claude
+
 # install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 ENV UV_SYSTEM_PYTHON=1
