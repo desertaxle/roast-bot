@@ -3,9 +3,7 @@ FROM prefecthq/prefect:3-latest
 WORKDIR /app
 
 # install necessary packages
-RUN apt-get update && apt-get install -y \
-curl \
-gpg
+RUN apt-get update && apt-get install -y curl gpg unzip
 
 # add gh GPG key
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg;
@@ -16,11 +14,14 @@ RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/g
 # install gh
 RUN apt-get update && apt-get install -y gh;
 
-# download and install fnm:
-RUN curl -o- https://fnm.vercel.app/install | bash
+# download and install nvm:
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 
-# download and install node:
-RUN fnm install 22
+# in lieu of restarting the shell
+RUN \. "$HOME/.nvm/nvm.sh"
+
+# install node
+RUN nvm install 22
 
 # verify the node and npm versions:
 RUN node -v
