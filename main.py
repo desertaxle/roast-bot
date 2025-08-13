@@ -23,6 +23,7 @@ async def set_up_git():
     # add a git config
     await anyio.run_process(["git", "config", "--global", "user.name", "roast-bot"], check=True)
     await anyio.run_process(["git", "config", "--global", "user.email", "roast-bot@users.noreply.github.com"], check=True)
+    await anyio.run_process(["git", "config", "--global", "push.autoSetupRemote", "true"], check=True)
 
 
 @task(retries=3, retry_delay_seconds=5)
