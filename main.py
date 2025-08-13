@@ -16,8 +16,10 @@ _FRONT_MATTER_RE = re.compile(r"^\ufeff?\+\+\+\s*\n(.*?)\n\+\+\+\s*(?:\n|$)", re
 
 @task
 async def set_up_git():
+    logger = get_run_logger()
     # check token works
-    await anyio.run_process(["gh", "auth", "status"], check=True)
+    process = await anyio.run_process(["gh", "auth", "status"], check=True)
+    logger.info(f"gh auth status: {process.stdout.decode()}")
     # set up git credential manager
     await anyio.run_process(["gh", "auth", "setup-git"], check=True)
     # add a git config
