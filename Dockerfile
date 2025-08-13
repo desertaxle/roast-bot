@@ -17,17 +17,14 @@ RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/g
 RUN apt-get update && apt-get install -y gh;
 
 # download and install fnm:
-curl -o- https://fnm.vercel.app/install | bash
+RUN curl -o- https://fnm.vercel.app/install | bash
 
-# download and install Node.js:
-fnm install 22
+# download and install node:
+RUN fnm install 22
 
-# verify the Node.js version:
-node -v
-
-# verify npm version:
-npm -v
-    
+# verify the node and npm versions:
+RUN node -v
+RUN npm -v
 
 # install claude-code
 RUN npm install -g @anthropic-ai/claude-code
