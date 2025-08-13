@@ -1,5 +1,7 @@
 FROM prefecthq/prefect:3-latest
 
+WORKDIR /app
+
 # install necessary packages
 RUN apt-get update && apt-get install -y \
 curl \
@@ -16,13 +18,15 @@ RUN apt-get update && apt-get install -y gh;
 
 # install claude-code
 RUN curl -fsSL https://claude.ai/install.sh | bash
+ENV PATH="~/.local/bin:$PATH"
 
 # install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # install dependencies
 COPY pyproject.toml .
-RUN uv sync --no-dev
+RUN uv sync --no-dev --compile-bytecode
+ENV PATH="/app/.venv/bin:$PATH"
 
 # copy code
 COPY main.py .

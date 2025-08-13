@@ -35,7 +35,7 @@ jobs:
     - name: Deploy Prefect flow
       if: github.ref == 'refs/heads/main'
       run: |
-        uv run prefect deploy --name roast-bot
+        uv run prefect deploy --name roast-desertaxle
       env:
         PREFECT_API_URL: ${{ secrets.PREFECT_API_URL }}
         PREFECT_API_KEY: ${{ secrets.PREFECT_API_KEY }}
