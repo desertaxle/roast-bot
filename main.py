@@ -127,6 +127,8 @@ def parse_frontmatter(content: str) -> dict[str, Any]:
 async def roast_prefect_developer(handle: str):
     logger = get_run_logger()
 
+    await smoke_test()
+
     await set_up_git()
 
     with tempfile.TemporaryDirectory(delete=False) as temp_dir:
@@ -140,5 +142,8 @@ async def roast_prefect_developer(handle: str):
             logger.info(f"Recent blog posts found. I'll get you next time, {handle}!")
 
 
-if __name__ == "__main__":
-    anyio.run(roast_prefect_developer, "desertaxle")
+async def smoke_test():
+    await anyio.run_process(["which", "gh"], check=True)
+    await anyio.run_process(["which", "git"], check=True)
+    await anyio.run_process(["which", "node"], check=True)
+    await anyio.run_process(["which", "claude"], check=True)

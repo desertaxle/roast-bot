@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y gh;
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 
 # install node
-RUN nvm install 22 && nvm use 22
+RUN nvm install 22 && nvm alias default node
 
 # verify the node and npm versions:
 RUN node -v
