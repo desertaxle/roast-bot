@@ -3,6 +3,11 @@ name: Deploy Prefect Flow
 on:
   push:
     branches: [main]
+    paths:
+      - 'main.py'
+      - 'Dockerfile'
+      - 'prefect.yaml'
+      - 'pyproject.toml'
   workflow_dispatch:
 
 permissions:
