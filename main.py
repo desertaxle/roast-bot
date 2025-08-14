@@ -107,9 +107,6 @@ async def push_to_dev_log(handle: str, tmp_dir: Path) -> None:
     logger = get_run_logger()
     logger.info("Pushing roast to dev log")
 
-    # TODO: Remove when you're done testing
-    await anyio.run_process(["git", "checkout", "-b", "roast-bot-test"], check=True, cwd=tmp_dir)
-
     await anyio.run_process(["git", "add", "."], check=True, cwd=tmp_dir)
     await anyio.run_process(
         ["git", "commit", "-m", f"Update dev log with roast of {handle}"],
