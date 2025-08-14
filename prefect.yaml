@@ -25,11 +25,15 @@ pull:
       directory: "."
 
 deployments:
-  - name: roast-desertaxle
+  - name: roast-bot
     description: Roast desertaxle's contributions to the PrefectHQ/prefect repo
     entrypoint: main.py:roast_prefect_developer
-    parameters:
-      handle: desertaxle
+    schedules:
+      - cron: "0 0 * * *"
+        slug: hourly
+        timezone: America/Chicago
+        parameters:
+          handle: desertaxle
     work_pool:
       name: above-ground
       job_variables:
