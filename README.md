@@ -12,3 +12,8 @@ This bot watches for recent blog posts in the [PrefectHQ dev-log repo](https://g
 4. Commits it to the dev log repo which is automatically published
 
 Because nothing motivates consistent blogging quite like the threat of AI-generated public humiliation.
+
+## Tools used
+
+- [Prefect](https://github.com/PrefectHQ/prefect) - orchestration and scheduling
+- [Claude Code](https://github.com/anthropics/claude-code) - roast generation

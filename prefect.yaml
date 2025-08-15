@@ -30,7 +30,7 @@ deployments:
     entrypoint: main.py:roast_prefect_developer
     schedules:
       - cron: "0 0 * * *"
-        slug: hourly
+        slug: daily
         timezone: America/Chicago
         parameters:
           handle: desertaxle
